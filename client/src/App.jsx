@@ -1,6 +1,7 @@
 // src/App.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import "./App.css"
 
 let Backend_URL = "http://localhost:3001";
 
@@ -110,14 +111,16 @@ const App = () => {
 
   function handle(e) {
     const item = { ...cart };
-    item[e.target.id] = e.target.value;
-    setCart(item);
+    if (e.target.value > 0) {
+      item[e.target.id] = e.target.value;
+      setCart(item);
+    }
     console.log(item);
   }
 
   return (
     <div>
-      <h1>Product Management</h1>
+      <h1>Super Market</h1>
       {/* <div>
         <h2>Add New Product</h2>
         <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
@@ -126,9 +129,9 @@ const App = () => {
         <input type="number" placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} />
         <button onClick={createProduct}>Add Product</button>
       </div> */}
-      <div>
+      <div className='product-list' >
         <h2>Product List</h2>
-        <table>
+        {/* <table>
           <thead>
             <tr>
               <th>Name</th>
@@ -153,27 +156,29 @@ const App = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
+        <div className="cards">
         { products.map(each=>(
           <div key={each._id} className="card">
             <h4>{each.name}</h4>
             <p>Rs {each.price}/{each.unit}</p>
             {each.discount && 
-            <p>Offer: {each.discount.type=="percentage" ?
-              <p>{each.discount.value}% off</p> :
-              <p>buy {each.discount.buy}{each.unit} get {each.discount.get}{each.unit}</p> }
-            </p>}
-            <input onChange={(e) => handle(e)} type='number' id = {each.name} value={cart.name} />
+            each.discount.type=="percentage" ?
+              <p>Offer {each.discount.value}% off</p> :
+              <p>Offer buy {each.discount.buy}{each.unit} get {each.discount.get}{each.unit}</p> 
+            }
+            <div className="input">
+              <input onChange={(e) => handle(e)} type='number' id = {each.name} value={cart.name} />{each.unit}
+            </div>
            </div>
         ))
-        }
+        }</div>
       </div>
       <div>
         <h2>Bill</h2>
-        <p>Enter your name</p>
-        <input type='text' value={customer} onChange={e => setCustomer(e.target.value)} />
-        { bill && <pre>{bill}</pre> }
-        <button onClick={(e)=>getBill(e)}>Generate Bill</button>
+        
+        { bill ? <pre>{bill}</pre> : <div><p>Enter your name</p><input type='text' value={customer} onChange={e => setCustomer(e.target.value)} /></div> }
+        <button className='generate' onClick={(e)=>getBill(e)}>Generate Bill</button>
       </div>
     </div>
   );

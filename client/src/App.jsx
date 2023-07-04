@@ -9,11 +9,11 @@ let Backend_URL =  'https://super-market-sable.vercel.app'
 const App = () => {
   const [customer, setCustomer] = useState("Guset")
   const [products, setProducts] = useState([]);
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
-  const [subcategory, setSubcategory] = useState('');
-  const [price, setPrice] = useState(0);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // const [name, setName] = useState('');
+  // const [catagories, setCatagories] = useState([]);
+  // const [subcatagories, setSubcatagories] = useState([]);
+  // const [price, setPrice] = useState(0);
+  // const [isAdmin, setIsAdmin] = useState(false);
   const [cart ,setCart] = useState({});
   const [bill,setBill] = useState(null)
 
@@ -23,6 +23,8 @@ const App = () => {
     axios.get(`${Backend_URL}/products`)
       .then(response => {
         setProducts(response.data.data);
+        // setCatagories([...new Set(products.map((e)=>e.catagory))])
+        // setSubcatagories([...new Set(products.map((e)=>e.subcatagory))])
         console.log(response.data.data)
       })
       .catch(error => {
@@ -30,6 +32,7 @@ const App = () => {
       });
   }, []);
 
+  // console.log("catagory=>",catagories)
   // Fetch bill
   const getBill = (e) => {
     e.preventDefault();
@@ -110,12 +113,19 @@ const App = () => {
   //   checkAdminStatus();
   // }, []);
 
+  
+  
   function handle(e) {
     const item = { ...cart };
     if (e.target.value > 0) {
-      item[e.target.id] = e.target.value;
-      setCart(item);
+      item[e.target.id] = +e.target.value;      
+    }else{
+      delete item[e.target.id]
+      if(!Object.keys(item).length){
+        setBill(null)
+      }
     }
+    setCart(item);
     console.log(item);
   }
 
@@ -130,6 +140,8 @@ const App = () => {
         <input type="number" placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} />
         <button onClick={createProduct}>Add Product</button>
       </div> */}
+      {/* {catagories.map()} */}
+
       <div className='product-list' >
         <h2>Product List</h2>
         {/* <table>
@@ -160,9 +172,13 @@ const App = () => {
         </table> */}
         <div className="cards">
         { products.map(each=>(
-          <div key={each._id} className="card">
+          <div key={each._id} className={cart[each.name]?"card added":"card"}>
             <h4>{each.name}</h4>
-            <p>Rs {each.price}/{each.unit}</p>
+            <div>
+              <span>{each.discountOnCatagory.value}% off in {each.catagory} </span><br/>
+              <span>{each.discountOnSubcatagory.value}% off in {each.subcatagory} </span>
+            </div>
+            <span className='price' >Rs {each.price}/{each.unit}</span>
             {each.discount && 
             each.discount.type=="percentage" ?
               <p>Offer {each.discount.value}% off</p> :

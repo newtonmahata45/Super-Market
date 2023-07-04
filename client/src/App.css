@@ -11,11 +11,12 @@
   
 }
 .cards{
-  width: 90%;
+  width: 80%;
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
   list-style: none;
-  gap:2%;
+  gap:6%;
   margin: 0;
   padding: 0;
 }
@@ -33,6 +34,8 @@
 }
 h4{
   font-size: large;
+  font-weight: 600;
+  color: #0004ff;
 }
 .input{
   border: 1px solid ;
@@ -67,4 +70,12 @@ margin-left: 20%;
     inset 0px -5px 10px #205823,
     inset 0px 5px 10px #aeffbb;
     margin: 4rem 0 2rem 0;
+}
+.price{
+  font-size: 20px;
+  font-weight: 600;
+}
+.added{
+  border: 3px solid green;
+  background: linear-gradient(to bottom left, #f59eab 20%, #FFC39E 70%);
 }

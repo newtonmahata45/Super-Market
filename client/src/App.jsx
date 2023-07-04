@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./App.css"
 
-let Backend_URL = "http://localhost:3001";
+let Backend_URL =  'https://super-market-sable.vercel.app'
+          //"http://localhost:3001";
 
 const App = () => {
   const [customer, setCustomer] = useState("Guset")
